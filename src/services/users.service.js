@@ -28,21 +28,20 @@ export class UsersService {
             throw error;
         }
 
-        // Regla de negocio: validar que el rol pertenezca a las constantes permitidas
-        const validRoles = Object.values(USER_ROLES);
-        const role = data.role && validRoles.includes(data.role)
-            ? data.role
-            : USER_ROLES.USER;
-
+        // SEGURIDAD: Forzamos siempre el rol por defecto (USER) al registrarse.
+        // Ignoramos cualquier intento de inyección de roles (como "ADMIN") desde el req.body.
         return await this.usersRepository.create({
             ...data,
-            role,
+            role: USER_ROLES.USER,
         });
     }
 
     async updateUser(id, updateData) {
         await this.getUserById(id);
 
+        // Opcional: Si quieres permitir que mediante una ruta de actualización (update) 
+        // un admin pueda cambiar roles en el futuro, puedes dejar la validación aquí,
+        // pero para el registro público (createUser) ya quedó blindado arriba.
         if (updateData.role && !Object.values(USER_ROLES).includes(updateData.role)) {
             const error = new Error('Rol de usuario inválido');
             error.statusCode = 400;
