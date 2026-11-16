@@ -1,0 +1,22 @@
+/api/users:
+  post:
+    summary: Registra un nuevo usuario
+    tags:
+      - Users
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/User"
+          # Agregamos un ejemplo completo que aparecerá por defecto en Swagger UI:
+          example:
+            firstName: "María"
+            lastName: "Gómez"
+            email: "maria.gomez@example.com"
+            password: "securePassword123"
+    responses:
+      "201":
+        description: Usuario creado exitosamente.
+      "400":
+        description: Email ya registrado o datos inválidos.

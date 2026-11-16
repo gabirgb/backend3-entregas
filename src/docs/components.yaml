@@ -1,0 +1,122 @@
+components:
+  schemas:
+    User:
+      type: object
+      required:
+        - firstName
+        - lastName
+        - email
+        - password
+      properties:
+        firstName:
+          type: string
+          example: Juan
+        lastName:
+          type: string
+          example: Pérez
+        email:
+          type: string
+          example: juan.perez@example.com
+        password:
+          type: string
+          example: "12345678"
+        role:
+          type: string
+          enum: [USER, ADMIN, DELIVERY]
+          example: USER
+
+    OrderItem:
+      type: object
+      required:
+        - product
+        - quantity
+      properties:
+        product:
+          type: string
+          description: ID del producto asociado al ítem.
+        quantity:
+          type: integer
+          description: Cantidad solicitada de este producto.
+
+    Order:
+      type: object
+      required:
+        - client
+        - products
+        - shippingAddress
+      properties:
+        id:
+          type: string
+          description: ID único del pedido.
+        client:
+          type: string
+          description: ID del usuario cliente que realiza el pedido.
+        products:
+          type: array
+          items:
+            $ref: "#/components/schemas/OrderItem"
+          description: Listado de productos del pedido.
+        totalPrice:
+          type: number
+          description: Precio total de la orden.
+        status:
+          type: string
+          enum: [PENDING, PROCESSING, SHIPPED, DELIVERED, CANCELLED]
+          description: Estado actual del pedido.
+        priority:
+          type: string
+          enum: [LOW, MEDIUM, HIGH, URGENT]
+          description: Prioridad del envío.
+        shippingAddress:
+          type: string
+          description: Dirección de entrega.
+
+    Delivery:
+      type: object
+      required:
+        - order
+        - driver
+        - trackingCode
+      properties:
+        id:
+          type: string
+          description: ID único de la entrega.
+        order:
+          type: string
+          description: ID de la orden asociada.
+        driver:
+          type: string
+          description: ID del repartidor asignado (rol DELIVERY).
+        status:
+          type: string
+          enum: [ASSIGNED, IN_TRANSIT, COMPLETED, FAILED]
+          description: Estado actual del reparto.
+        trackingCode:
+          type: string
+          description: Código único de rastreo (Tracking Code).
+
+    ErrorResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: error
+        code:
+          type: string
+          example: USER_NOT_FOUND
+        message:
+          type: string
+          example: El usuario solicitado no existe en el sistema.
+        cause:
+          type: string
+          example: No se encontró ningún usuario con el ID especificado.
+
+    SuccessResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: success
+        message:
+          type: string
+          example: Operación realizada con éxito.

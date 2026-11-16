@@ -1,0 +1,62 @@
+paths:
+  /api/mocks/users:
+    get:
+      summary: Genera usuarios simulados en memoria
+      tags:
+        - Mocks
+      parameters:
+        - in: query
+          name: qty
+          schema:
+            type: integer
+          required: false
+          description: Cantidad de usuarios a generar (por defecto 10).
+      responses:
+        "200":
+          description: Usuarios generados con éxito.
+        "400":
+          description: Cantidad inválida (valor negativo o no numérico).
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/mocks/products:
+    get:
+      summary: Genera productos simulados en memoria
+      tags:
+        - Mocks
+      parameters:
+        - in: query
+          name: qty
+          schema:
+            type: integer
+          required: false
+          description: Cantidad de productos a generar.
+      responses:
+        "200":
+          description: Productos generados con éxito.
+        "400":
+          description: Cantidad inválida.
+
+  /api/mocks/seed:
+    post:
+      summary: Población masiva de base de datos (Seeding)
+      tags:
+        - Mocks
+      parameters:
+        - in: query
+          name: qty
+          schema:
+            type: integer
+          required: false
+          description: Cantidad de registros a insertar en cada colección.
+      responses:
+        "201":
+          description: Base de datos poblada exitosamente con datos de prueba.
+        "500":
+          description: Error crítico durante la inserción en MongoDB.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"

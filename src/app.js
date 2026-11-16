@@ -1,4 +1,6 @@
 import express from 'express';
+import swaggerUi from 'swagger-ui-express';
+import { specs } from './config/swagger.config.js';
 import productsRouter from './routes/products.router.js';
 import usersRouter from './routes/users.router.js';
 import mocksRouter from './routes/mocks.router.js';
@@ -15,6 +17,9 @@ app.use(express.urlencoded({ extended: true }));
 
 // Middleware de logging HTTP
 app.use(addLogger);
+
+// Ruta interactiva de Swagger UI
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 // Rutas de negocio y herramientas
 app.use('/api/products', productsRouter);

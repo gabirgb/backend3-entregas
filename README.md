@@ -95,3 +95,31 @@ De mayor a menor severidad:
 1. Iniciar el servidor (`npm run dev` o `npm start`).
 2. Realizar una petición `GET` a `http://localhost:8080/loggerTest`.
 3. Verificar en la consola que se imprimen los 6 niveles con timestamp y verificar que se haya generado el archivo `logs/error-YYYY-MM-DD.log` conteniendo únicamente los mensajes de nivel `error` y `fatal`.
+
+==================================================
+
+# ShipNow API — Pre-entrega Módulo 5
+
+## Documentación de la API (Swagger / OpenAPI)
+
+ShipNow API incluye una interfaz interactiva de documentación técnica desarrollada con **Swagger** (`swagger-jsdoc` y `swagger-ui-express`).
+
+### Cómo acceder a la documentación:
+
+1. Iniciar el servidor ejecutando `npm run dev` o `npm start`.
+2. Abrir el navegador e ingresar a la ruta:
+   `http://localhost:8080/api/docs`
+
+### Módulos Documentados y Organización (`Tags`)
+
+La documentación se encuentra agrupada en las siguientes secciones:
+
+- **Users**: Gestión de registros y consultas de usuarios del sistema.
+- **Orders**: Control de pedidos, estados y prioridades logísticas.
+- **Deliveries**: Seguimiento de entregas y asignación de repartidores.
+- **Mocks**: Generación de datos de prueba en memoria y herramientas de _Seeding_ masivo en MongoDB (incluyendo validaciones de cantidades inválidas).
+- **Logger**: Endpoint interno de validación para probar los 6 niveles de Winston (`debug`, `http`, `info`, `warning`, `error`, `fatal`).
+
+### Esquemas Reutilizables (`Schemas`)
+
+Se definieron estructuras globales para entidades (`User`, `Order`, `Delivery`, `OrderItem`) y modelos unificados para respuestas de éxito y error (`ErrorResponse`, `SuccessResponse`) en consonancia con la capa centralizada de manejo de errores.

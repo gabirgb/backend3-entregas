@@ -1,0 +1,10 @@
+paths:
+  /loggerTest:
+    get:
+      summary: Endpoint de prueba del sistema de logging (Herramienta interna)
+      description: Genera logs de prueba en todos los niveles (debug, http, info, warning, error, fatal) para verificar la salida por consola y la rotación en archivos. No representa una funcionalidad de negocio.
+      tags:
+        - Logger
+      responses:
+        "200":
+          description: Logs de prueba generados correctamente.
