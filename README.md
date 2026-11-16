@@ -123,3 +123,25 @@ La documentación se encuentra agrupada en las siguientes secciones:
 ### Esquemas Reutilizables (`Schemas`)
 
 Se definieron estructuras globales para entidades (`User`, `Order`, `Delivery`, `OrderItem`) y modelos unificados para respuestas de éxito y error (`ErrorResponse`, `SuccessResponse`) en consonancia con la capa centralizada de manejo de errores.
+
+==================================================
+
+# ShipNow API — Pre-entrega Módulo 6
+
+## Testing Funcional Automatizado
+
+ShipNow API cuenta con una suite de pruebas funcionales automatizadas para garantizar la integridad de los endpoints, los contratos de respuesta y el manejo centralizado de errores.
+
+### 1. Herramientas utilizadas
+
+- **Mocha**: Framework de ejecución y organización de suites de pruebas (`describe`, `it`, hooks `before`/`after`/`beforeEach`).
+- **Chai**: Librería de aserciones expresivas (`expect`) para validar códigos de estado HTTP, cabeceras y estructura de cuerpos JSON.
+- **Supertest**: Simulación de peticiones HTTP reales directamente sobre la instancia de Express (`app.js`) sin necesidad de abrir un puerto manualmente.
+
+### 2. Cómo ejecutar los tests
+
+Para correr la suite completa desde cero, ejecuta en la raíz del proyecto:
+
+```bash
+npm test
+```
