@@ -1,18 +1,20 @@
 import app from './app.js';
 import { config } from './config/env.config.js';
 import { connectDB } from './config/db.config.js';
+import { logger } from './config/logger.config.js';
 
 const startServer = async () => {
     try {
-        // 1. Conectar a la base de datos primero
         await connectDB();
 
-        // 2. Arrancar el servidor HTTP una vez establecida la conexión
         app.listen(config.port, () => {
-            console.log(`Servidor ShipNow escuchando en el puerto ${config.port} (${config.nodeEnv})`);
+            logger.info(`Servidor ShipNow escuchando en el puerto ${config.port}`);
         });
     } catch (error) {
-        console.error('Error al iniciar el servidor:', error.message);
+        logger.fatal('Falla crítica al iniciar el servidor HTTP', {
+            message: error.message,
+            stack: error.stack,
+        });
         process.exit(1);
     }
 };

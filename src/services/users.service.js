@@ -1,3 +1,4 @@
+import { logger } from '../config/logger.config.js';
 import { UsersRepository } from '../repositories/users.repository.js';
 import { USER_ROLES } from '../constants/index.js';
 import { CustomError } from './errors/custom-error.js';
@@ -42,10 +43,10 @@ export class UsersService {
 
         // SEGURIDAD: Forzamos siempre el rol por defecto (USER) al registrarse.
         // Ignoramos cualquier intento de inyección de roles (como "ADMIN") desde el req.body.
-        return await this.usersRepository.create({
-            ...data,
-            role: USER_ROLES.USER,
-        });
+        const created = await this.usersRepository.create({ ...data, role: USER_ROLES.USER, });
+        logger.info(`Usuario creado correctamente: ${created.firstName} ${created.lastName} (Email: ${created.email})`, { id: created._id });
+
+        return created;
     }
 
     async updateUser(id, updateData) {

@@ -1,3 +1,4 @@
+import { logger } from '../config/logger.config.js';
 import { faker } from '@faker-js/faker';
 import { USER_ROLES, PRODUCT_STATUS, ORDER_STATUS, ORDER_PRIORITY, DELIVERY_STATUS } from '../constants/index.js';
 import { MocksRepository } from '../repositories/mocks.repository.js';
@@ -43,6 +44,7 @@ export class MocksService {
                 isActive: true,
             });
         }
+        logger.debug(`Generando ${validQty} registros mock en memoria`);
         return users;
     }
 
@@ -62,6 +64,7 @@ export class MocksService {
                 isActive: true,
             });
         }
+        logger.debug(`Generando ${validQty} registros mock en memoria`);
         return products;
     }
 
@@ -101,6 +104,13 @@ export class MocksService {
                 isActive: true,
             }));
             await this.mocksRepository.insertManyDeliveries(deliveries);
+
+            logger.info('Seeding de base de datos completado exitosamente', {
+                users: insertedUsers.length,
+                products: insertedProducts.length,
+                orders: insertedOrders.length,
+                deliveries: deliveries.length,
+            });
 
             return {
                 message: 'Base de datos poblada exitosamente con datos de prueba',

@@ -1,3 +1,4 @@
+import { logger } from '../config/logger.config.js';
 import { ProductsRepository } from '../repositories/products.repository.js';
 import { PRODUCT_STATUS } from '../constants/index.js';
 import { CustomError } from './errors/custom-error.js';
@@ -53,10 +54,10 @@ export class ProductsService {
         const status =
             data.stock > 0 ? PRODUCT_STATUS.AVAILABLE : PRODUCT_STATUS.OUT_OF_STOCK;
 
-        return await this.productsRepository.create({
-            ...data,
-            status,
-        });
+        const created = await this.productsRepository.create({ ...data, status });
+        logger.info(`Producto creado correctamente: ${created.title} (SKU: ${created.code})`, { id: created._id });
+
+        return created;
     }
 
     async updateProduct(id, updateData) {
