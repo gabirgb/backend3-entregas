@@ -1,5 +1,7 @@
 import { ProductsRepository } from '../repositories/products.repository.js';
 import { PRODUCT_STATUS } from '../constants/index.js';
+import { CustomError } from './errors/custom-error.js';
+import { ERROR_DICTIONARY } from '../constants/error-dictionary.js';
 
 export class ProductsService {
     constructor() {
@@ -22,9 +24,14 @@ export class ProductsService {
     async getProductById(id) {
         const product = await this.productsRepository.getById(id);
         if (!product) {
-            const error = new Error('Producto no encontrado');
-            error.statusCode = 404;
-            throw error;
+            const errInfo = ERROR_DICTIONARY.PRODUCT_NOT_FOUND;
+            throw CustomError.createError({
+                name: 'ProductNotFoundError',
+                cause: `No se encontró ningún producto activo con el ID: ${id}`,
+                message: errInfo.message,
+                code: errInfo.code,
+                status: errInfo.status,
+            });
         }
         return product;
     }
@@ -32,9 +39,14 @@ export class ProductsService {
     async createProduct(data) {
         const existing = await this.productsRepository.getByCode(data.code);
         if (existing) {
-            const error = new Error(`Ya existe un producto con el código ${data.code}`);
-            error.statusCode = 400;
-            throw error;
+            const errInfo = ERROR_DICTIONARY.PRODUCT_ALREADY_EXISTS;
+            throw CustomError.createError({
+                name: 'ProductAlreadyExistsError',
+                cause: `El código SKU ${data.code} ya está registrado.`,
+                message: errInfo.message,
+                code: errInfo.code,
+                status: errInfo.status,
+            });
         }
 
         // Regla de negocio: determinar estado inicial según stock

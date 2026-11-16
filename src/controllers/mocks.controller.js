@@ -6,8 +6,8 @@ const mocksService = new MocksService();
 export class MocksController {
     static getMockUsers(req, res, next) {
         try {
-            const qty = Number(req.query.qty) || 10;
-            const users = mocksService.generateMockUsers(qty);
+            // Pasamos req.query.qty tal cual para que el Service lo valide
+            const users = mocksService.generateMockUsers(req.query.qty);
             res.status(HTTP_STATUS.OK).json({ status: 'success', qty: users.length, payload: users });
         } catch (error) {
             next(error);
@@ -16,8 +16,7 @@ export class MocksController {
 
     static getMockProducts(req, res, next) {
         try {
-            const qty = Number(req.query.qty) || 10;
-            const products = mocksService.generateMockProducts(qty);
+            const products = mocksService.generateMockProducts(req.query.qty);
             res.status(HTTP_STATUS.OK).json({ status: 'success', qty: products.length, payload: products });
         } catch (error) {
             next(error);
@@ -26,8 +25,7 @@ export class MocksController {
 
     static async seedDatabase(req, res, next) {
         try {
-            const qty = Number(req.query.qty) || 10;
-            const result = await mocksService.seedDatabase(qty);
+            const result = await mocksService.seedDatabase(req.query.qty);
             res.status(HTTP_STATUS.CREATED).json({ status: 'success', ...result });
         } catch (error) {
             next(error);

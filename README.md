@@ -38,3 +38,24 @@ La API cuenta con un módulo dedicado a la generación de datos de prueba utiliz
 3. **Carga masiva de datos de prueba en MongoDB (Seeding):**
    - **POST** `/api/mocks/seed?qty=10`
    - _Descripción:_ Inserta en la base de datos la cantidad especificada de usuarios, productos, órdenes y entregas, manteniendo íntegras las relaciones relacionales entre colecciones.
+
+==================================================
+
+# ShipNow API — Pre-entrega Módulo 3
+
+## Sistema Centralizado de Manejo de Errores
+
+ShipNow API implementa una capa unificada de gestión de errores mediante el uso de errores personalizados, un diccionario de errores centralizado y un middleware global que intercepta los fallos de la aplicación.
+
+### Estructura de Respuesta de Error
+
+Todas las respuestas de error devuelven un formato JSON predecible y uniforme:
+
+```json
+{
+  "status": "error",
+  "code": "USER_NOT_FOUND",
+  "message": "El usuario solicitado no existe en el sistema.",
+  "cause": "No se encontró ningún usuario con el ID: 650d..."
+}
+```

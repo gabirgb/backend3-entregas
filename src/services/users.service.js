@@ -1,5 +1,7 @@
 import { UsersRepository } from '../repositories/users.repository.js';
 import { USER_ROLES } from '../constants/index.js';
+import { CustomError } from './errors/custom-error.js';
+import { ERROR_DICTIONARY } from '../constants/error-dictionary.js';
 
 export class UsersService {
     constructor() {
@@ -13,9 +15,14 @@ export class UsersService {
     async getUserById(id) {
         const user = await this.usersRepository.getById(id);
         if (!user) {
-            const error = new Error('Usuario no encontrado');
-            error.statusCode = 404;
-            throw error;
+            const errInfo = ERROR_DICTIONARY.USER_NOT_FOUND;
+            throw CustomError.createError({
+                name: 'UserNotFoundError',
+                cause: `No se encontró ningún usuario con el ID: ${id}`,
+                message: errInfo.message,
+                code: errInfo.code,
+                status: errInfo.status,
+            });
         }
         return user;
     }
@@ -23,9 +30,14 @@ export class UsersService {
     async createUser(data) {
         const existing = await this.usersRepository.getByEmail(data.email);
         if (existing) {
-            const error = new Error('El correo electrónico ya está registrado');
-            error.statusCode = 400;
-            throw error;
+            const errInfo = ERROR_DICTIONARY.USER_ALREADY_EXISTS;
+            throw CustomError.createError({
+                name: 'UserAlreadyExistsError',
+                cause: `El email ${data.email} ya se encuentra registrado.`,
+                message: errInfo.message,
+                code: errInfo.code,
+                status: errInfo.status,
+            });
         }
 
         // SEGURIDAD: Forzamos siempre el rol por defecto (USER) al registrarse.
@@ -43,9 +55,14 @@ export class UsersService {
         // un admin pueda cambiar roles en el futuro, puedes dejar la validación aquí,
         // pero para el registro público (createUser) ya quedó blindado arriba.
         if (updateData.role && !Object.values(USER_ROLES).includes(updateData.role)) {
-            const error = new Error('Rol de usuario inválido');
-            error.statusCode = 400;
-            throw error;
+            const errInfo = ERROR_DICTIONARY.INVALID_USER_ROLE;
+            throw CustomError.createError({
+                name: 'InvalidUserRoleError',
+                cause: `El rol ${updateData.role} no es válido.`,
+                message: errInfo.message,
+                code: errInfo.code,
+                status: errInfo.status,
+            });
         }
 
         return await this.usersRepository.update(id, updateData);
