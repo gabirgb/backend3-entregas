@@ -6,6 +6,7 @@ import usersRouter from './routes/users.router.js';
 import ordersRouter from './routes/orders.router.js';
 import mocksRouter from './routes/mocks.router.js';
 import loggerRouter from './routes/logger.router.js';
+import filesRouter from './routes/files.router.js';
 import { addLogger } from './middlewares/logger.middleware.js';
 import { handleErrors } from './middlewares/error.middleware.js';
 import { CustomError } from './services/errors/custom-error.js';
@@ -27,6 +28,7 @@ app.use('/api/products', productsRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/mocks', mocksRouter);
 app.use('/api/orders', ordersRouter);
+app.use('/api', filesRouter);
 app.use('/', loggerRouter); // Expone GET /loggerTest
 
 // Captura de rutas inexistentes (404) hacia el middleware global

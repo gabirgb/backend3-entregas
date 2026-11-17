@@ -145,3 +145,39 @@ Para correr la suite completa desde cero, ejecuta en la raíz del proyecto:
 ```bash
 npm test
 ```
+
+==================================================
+
+# ShipNow API — Pre-entrega Módulo 7
+
+## Carga de archivos, documentos y comprobantes
+
+ShipNow API incorpora la gestión y carga de archivos mediante **Multer**, validando tipos MIME, límites de tamaño y asociando metadatos a las entidades del sistema sin saturar la base de datos con binarios.
+
+### 1. Configuración y Almacenamiento (`src/config/multer.config.js`)
+
+- **Almacenamiento dinámico (`diskStorage`)**: Clasifica los archivos recibidos en subcarpetas según el campo enviado (`uploads/profiles/`, `uploads/documents/`, `uploads/receipts/`).
+- **Nombrado único**: Genera nombres únicos combinando marcas de tiempo (`Date.now()`) para evitar colisiones o sobrescrituras.
+- **Validaciones y Límites**: Filtra los formatos permitidos (imágenes para perfiles; PDF o imágenes para documentos y comprobantes) con un tamaño máximo estricto de **5MB** por archivo.
+- **Control de versiones**: La carpeta `uploads/` y su contenido están excluidos en `.gitignore`.
+
+### 2. Esquema Reutilizable de Metadatos (`src/models/schemas/document.schema.js`)
+
+- Se extrajo un subesquema modularizado (`documentSchema`) que almacena únicamente referencias ligeras en MongoDB: `name`, `reference` (ruta física), `documentType`, `size` y `mimetype`, integrado tanto en los perfiles de usuario como en los comprobantes de órdenes.
+
+### 3. Endpoints de Carga (`multipart/form-data`)
+
+1. **Subir documentos de usuario:**
+   - **POST** `/api/users/:uid/documents`
+   - _Campos:_ `document` (archivo binario, máx. 5MB) y `documentType` (opcional).
+   - _Descripción:_ Valida la existencia del usuario y registra los metadatos del archivo en su arreglo `documents`.
+
+2. **Subir comprobantes asociados a órdenes:**
+   - **POST** `/api/orders/:oid/receipt`
+   - _Campos:_ `receipt` (archivo binario, máx. 5MB).
+   - _Descripción:_ Valida la orden y asocia los metadatos del comprobante de pago.
+
+### 4. Integración con Errores, Logs y Testing
+
+- **Errores centralizados**: Los fallos nativos de Multer (`LIMIT_FILE_SIZE`) y las validaciones de archivos (`FILE_REQUIRED`) se normalizan a través del middleware global de errores y se registran con **Winston**.
+- **Documentación y Tests**: Los endpoints están documentados en Swagger (`src/docs/files.yaml`) y validados por la suite automatizada de pruebas funcionales en `tests/files.test.js`.

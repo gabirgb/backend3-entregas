@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import { ORDER_STATUS, ORDER_PRIORITY } from '../constants/index.js';
+import { documentSchema } from './schemas/document.schema.js';
 
 const orderSchema = new mongoose.Schema(
     {
@@ -21,6 +22,7 @@ const orderSchema = new mongoose.Schema(
             enum: Object.values(ORDER_PRIORITY),
             default: ORDER_PRIORITY.MEDIUM,
         },
+        receipt: documentSchema,
         shippingAddress: { type: String, required: true, trim: true },
         isActive: { type: Boolean, default: true },
     },

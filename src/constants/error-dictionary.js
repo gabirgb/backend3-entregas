@@ -48,4 +48,21 @@ export const ERROR_DICTIONARY = Object.freeze({
         code: 'INTERNAL_SERVER_ERROR',
         message: 'Ocurrió un error interno en el servidor.',
     },
+
+    // Errores de Archivos y Multer
+    FILE_REQUIRED: {
+        status: HTTP_STATUS.BAD_REQUEST,
+        code: 'FILE_REQUIRED',
+        message: 'No se ha adjuntado ningún archivo requerido.',
+    },
+    INVALID_FILE_TYPE: {
+        status: HTTP_STATUS.BAD_REQUEST,
+        code: 'INVALID_FILE_TYPE',
+        message: 'El formato o tipo de archivo no está permitido.',
+    },
+    FILE_TOO_LARGE: {
+        status: HTTP_STATUS.BAD_REQUEST,
+        code: 'FILE_TOO_LARGE',
+        message: 'El archivo excede el tamaño máximo permitido de 5MB.',
+    },
 });

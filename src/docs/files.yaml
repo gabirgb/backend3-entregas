@@ -1,0 +1,114 @@
+paths:
+  /api/users/{uid}/documents:
+    post:
+      summary: Sube un documento de identidad o perfil para un usuario
+      description: Permite adjuntar un archivo (imagen o PDF) y asociarlo a un usuario existente mediante su ID.
+      tags:
+        - Files
+      parameters:
+        - in: path
+          name: uid
+          required: true
+          schema:
+            type: string
+          description: ID único del usuario.
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - document
+              properties:
+                document:
+                  type: string
+                  format: binary
+                  description: Archivo a subir (PDF o imagen, máx 5MB).
+                documentType:
+                  type: string
+                  example: "DNI"
+                  description: Tipo o categoría del documento (ej. DNI, pasaporte, licencia).
+      responses:
+        "200":
+          description: Documento subido y asociado correctamente.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: Documento subido y asociado correctamente.
+                  payload:
+                    $ref: "#/components/schemas/FileMetadata"
+        "400":
+          description: Error de validación (archivo faltante, formato no permitido o excede el límite de tamaño).
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Usuario no encontrado.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/orders/{oid}/receipt:
+    post:
+      summary: Sube y asocia un comprobante de pago a una orden
+      description: Permite adjuntar el comprobante en formato PDF o imagen vinculado a una orden específica.
+      tags:
+        - Files
+      parameters:
+        - in: path
+          name: oid
+          required: true
+          schema:
+            type: string
+          description: ID único de la orden.
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - receipt
+              properties:
+                receipt:
+                  type: string
+                  format: binary
+                  description: Archivo del comprobante (PDF o imagen, máx 5MB).
+      responses:
+        "200":
+          description: Comprobante asociado con éxito.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: Comprobante de pago asociado al pedido con éxito.
+                  payload:
+                    $ref: "#/components/schemas/FileMetadata"
+        "400":
+          description: Error en el archivo o formato inválido.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Orden no encontrada.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"

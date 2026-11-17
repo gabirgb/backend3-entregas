@@ -120,3 +120,32 @@ components:
         message:
           type: string
           example: Operación realizada con éxito.
+
+    FileMetadata:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "dni_frente.pdf"
+        reference:
+          type: string
+          example: "uploads/documents/document-1718623000123-987654321.pdf"
+        documentType:
+          type: string
+          example: "DNI"
+        size:
+          type: number
+          example: 1048576
+        mimetype:
+          type: string
+          example: "application/pdf"
+
+    UserWithDocuments:
+      allOf:
+        - $ref: "#/components/schemas/User"
+        - type: object
+          properties:
+            documents:
+              type: array
+              items:
+                $ref: "#/components/schemas/FileMetadata"

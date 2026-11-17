@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import { USER_ROLES } from '../constants/index.js';
+import { documentSchema } from './schemas/document.schema.js';
 
 const userSchema = new mongoose.Schema(
     {
@@ -12,6 +13,7 @@ const userSchema = new mongoose.Schema(
             enum: Object.values(USER_ROLES),
             default: USER_ROLES.USER,
         },
+        documents: [documentSchema],
         isActive: { type: Boolean, default: true },
     },
     { timestamps: true }
